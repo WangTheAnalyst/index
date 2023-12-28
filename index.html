@@ -1,0 +1,444 @@
+<html>
+	<head>
+		<title>Analyst Portfolio by Tom Wang</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper" class="fade-in">
+
+				<!-- Intro -->
+					<div id="intro">
+						<h1>TOM WANG<br /> ANALYST PORTFOLIO</h1>
+						<p>Data Analyst well versed in SQL, Python, Tableau, PowerBI<br />
+						<ul class="actions">
+							<li><a href="#header" class="button icon solid solo fa-arrow-down scrolly">Continue</a></li>
+						</ul>
+					</div>
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo">Tom Wang</a>
+					</header>
+
+				<!-- Nav -->
+				<nav id="nav">
+					<ul class="links">
+						<li class="active"><a href="index.html">Case 1: SQL and Power BI</a></li>
+						<li><a href="generic.html">Case 2&3: Python</a></li>
+						<li><a href="elements.html">Case 4: Tablueau</a></li>
+					</ul>
+					<ul class="icons">
+						<!--li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li-->
+						<!--li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li-->
+						<li><a href="#" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
+						<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+					</ul>
+				</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Featured Post -->
+							<article class="post featured">
+								<header class="major">
+									<span class="date">December 25, 2023</span>
+									<h2><a href="#">Data Analyst Project<br />
+										</a></h2>
+									<p>Data Analyst Project - Sales Management</p>
+								<a href="#" class="image main"><img src="images/pic101HD.jpg" alt="" /></a>
+								<ul class="actions special">
+									<!--<li><a href="#" class="button large">View Project</a></li> -->
+								</ul>
+								<hr>
+								<p style="font-size: 24px; text-align: left; font-weight: bold;">Business Request & User Stories</p>
+								<p style="text-align: left">The business request for this data analyst project was an excutive sales report for sales managers. Based on the request that was made from the business we following user stories were defined to fulfill delivery and ensure that acceptance criteria's were maintained throughout the project.</p>
+								<div class="table-wrapper">
+									<table>
+											<style>
+													body {
+													  text-align: left;
+													  font-size: 16px;
+													}
+												  </style>
+										<thead>
+											<tr>
+												<th>#</th>
+												<th>As a (role)</th>
+												<th>I want (request/demand)</th>
+												<th>So that I (user value)</th>
+												<th>Acceptance Criteria</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>1</td>
+												<td>Sales Manager</td>
+												<td>To get a dash board overview of internet sales</td>
+												<td>Can follow better which customers and products sells the best</td>
+												<td>A Power BI dashboard which updates data once a day</td>
+											</tr>
+											<tr>
+												<td>2</td>
+												<td>Sales Representative</td>
+												<td>A detailed overview of Internet Sales per Customers</td>
+												<td>Can follow up my customers that buys the most and who we can sell more to</td>
+												<td>A Power BI dashboard which allows me to filter data for each customer</td>
+											</tr>
+											<tr>
+												<td>3</td>
+												<td>Sales Representative</td>
+												<td>A detailed overview of Internet Sales per Products</td>
+												<td>Can follow up my Products that sells the most</td>
+												<td>A Power BI dashboard which allows me to filter data for each Product</td>
+											</tr>
+											<tr>
+												<td>4</td>
+												<td>Sales Manager</td>
+												<td>A dashboard overview of internet sales</td>>
+												<td>Follow sales over time against budget</td>>
+												<td>A Power BI dashboard which includes KPIs comparing against budget</td>
+											</tr>
+										</tbody>
+									</table>
+									<hr>
+									<p style="font-size: 24px; text-align: left; font-weight: bold;">Data Cleansing & Transformation (SQL)</p>
+									<p style="text-align: left">To create the necessary data model for doing analysis and fulfilling the business needs defined in the user stories the following tables were extracted using SQL.</p>
+									<p style="text-align: left">One data source (sales budgets) were provided in Excel format and were connected in the data model in a later step of the process.</p>
+									<p style="text-align: left">Below are the SQL statements for cleansing and transforming necessary data.</p>
+									<p style="text-align: left; font-weight: bold;">DIM_Calendar:</p>
+									<pre>
+										<code style="text-align: left;font-size: 16px">-- Cleansed DIM_Date Table --
+SELECT 
+	[DateKey],
+	[FullDateAlternateKey] AS Date,
+	--[DayNumberOfWeek],
+	[EnglishDayNameOfWeek] AS Day,
+	--[SpanishDayNameOfWeek],
+	--[FrenchDayNameOfWeek],
+	--[DayNumberOfMonth],
+	--[DayNumberOfYear],
+	--[WeekNumberOfYear],
+	[EnglishMonthName] AS Month,
+	LEFT([EnglishMonthName],3) AS MonthShort, 
+	--[SpanishMonthName],
+	--[FrenchMonthName],
+	[MonthNumberOfYear] AS MonthNo,
+	[CalendarQuarter] AS Quarter,
+	[CalendarYear] AS Year
+	--[CalendarSemester],
+	--[FiscalQuarter],
+	--[FiscalYear],
+	--[FiscalSemester]
+FROM [AdventureWorksDW2022].[dbo].[DimDate]
+WHERE CalendarYear >= 2019</code>
+									</pre>
+									<p style="text-align: left; font-weight: bold;">DIM_Customers:</p>
+									<pre>
+										<code style="text-align: left;font-size: 16px">-- Cleansed DIM_Customers Table --
+SELECT 
+	[City] AS [City],
+	c.CustomerKey AS [Customer_Key],
+    --[GeographyKey],
+	--[CustomerAlternateKey],
+	--[Title],
+	c.firstname AS [First_Name],
+	--[MiddleName],
+	c.lastname AS [Last_Name],
+	CONCAT(c.FirstName,' ',c.LastName) AS [Full_Name], <span class="green-word">-- Combined First and Last Name</span>
+	--[NameStyle],
+	--[BirthDate],
+	--[MaritalStatus],
+	--[Suffix],
+	CASE c.gender WHEN 'M' THEN 'Male' WHEN 'F' THEN 'Female' END AS [Gender],
+	--[EmailAddress],
+	--[YearlyIncome],
+	--[TotalChildren],
+	--[NumberChildrenAtHome],
+	--[EnglishEducation],
+	--[SpanishEducation],
+	--[FrenchEducation],
+	--[EnglishOccupation],
+	--[SpanishOccupation],
+	--[FrenchOccupation],
+	--[HouseOwnerFlag],
+	--[NumberCarsOwned],
+	--[AddressLine1],
+	--[AddressLine2],
+	--[Phone],
+	c.datefirstpurchase AS [DateFirstPurchase]
+	--[CommuteDistance]
+FROM [AdventureWorksDW2022].[dbo].[DimCustomer] AS c
+LEFT JOIN [AdventureWorksDW2022].[dbo].[DimGeography] AS g ON g.GeographyKey = c.GeographyKey
+ORDER BY CustomerKey ASC <span class="green-word">-- Ordered List by CustomerKey</span></code>
+									</pre>
+									<p style="text-align: left; font-weight: bold;">DIM_Products:</p>
+									<pre>
+										<code style="text-align: left;font-size: 16px">-- Cleansed DIM_Products Tabel --
+SELECT 
+	p.[ProductKey], 
+	p.[ProductAlternateKey] AS ProductItemCode, 
+	-- ,[ProductSubcategoryKey]
+	-- ,[WeightUnitMeasureCode]
+	-- ,[SizeUnitMeasureCode]
+	p.[EnglishProductName] AS [Product Name], 
+	ps.EnglishProductSubcategoryName AS [Sub Category], 
+	-- Joined in from Sub Category Table
+	pc.EnglishProductCategoryName AS [Product Category], 
+	-- Joined in from Category Table
+	-- ,[SpanishProductName]
+	-- ,[FrenchProductName]
+	-- ,[StandardCost]
+	-- ,[FinishedGoodsFlag]
+	p.[Color] AS [Product Color], 
+	-- ,[SafetyStockLevel]
+	-- ,[ReorderPoint]
+	-- ,[ListPrice]
+	p.[Size] AS [Product Size], 
+	-- ,[SizeRange]
+	-- ,[Weight]
+	-- ,[DaysToManufacture]
+	p.[ProductLine] AS [Product Line], 
+	-- ,[DealerPrice]
+	-- ,[Class]
+	-- ,[Style]
+	p.[ModelName] AS [Product Model Name], 
+	-- ,[LargePhoto]
+	p.[EnglishDescription] AS [Product Description], 
+	-- ,[FrenchDescription]
+	-- ,[ChineseDescription]
+	-- ,[ArabicDescription]
+	-- ,[HebrewDescription]
+	-- ,[ThaiDescription]
+	-- ,[GermanDescription]
+	-- ,[JapaneseDescription]
+	-- ,[TurkishDescription]
+	-- ,[StartDate]
+	-- ,[EndDate]
+	ISNULL(p.[Status], 'Outdated') AS [Product Status] 
+FROM 
+	[AdventureWorksDW2022].[dbo].[DimProduct] AS p 
+	LEFT JOIN dbo.DimProductSubcategory AS ps ON ps.ProductSubcategoryKey = p.ProductSubcategoryKey
+	LEFT JOIN dbo.DimProductCategory AS pc ON ps.ProductCategoryKey = pc.ProductCategoryKey 
+ORDER BY 
+	p.ProductKey DESC</code>
+										</pre>
+										<p style="text-align: left; font-weight: bold;">FACT_InternetSales:</p>
+										<pre>
+												<code style="text-align: left;font-size: 16px">
+SELECT 
+	[ProductKey], 
+	[OrderDateKey], 
+	[DueDateKey], 
+	[ShipDateKey], 
+	[CustomerKey],
+	--[PromotionKey],
+	--[CurrencyKey],
+	--[SalesTerritoryKey], 
+	[SalesOrderNumber], 
+	--[SalesOrderLineNumber], 
+	--[RevisionNumber], 
+	--[OrderQuantity], 
+	--[UnitPrice], 
+	--[ExtendedAmount], 
+	--[UnitPriceDiscountPct], 
+	--[DiscountAmount], 
+	--[ProductStandardCost], 
+	--[TotalProductCost], 
+	[SalesAmount]
+	--[TaxAmt], 
+	--[Freight], 
+	--[CarrierTrackingNumber], 
+	--[CustomerPONumber], 
+	--[OrderDate], 
+	--[DueDate], 
+	--[ShipDate] 
+FROM 
+	[AdventureWorksDW2022].[dbo].[FactInternetSales]
+WHERE
+	LEFT(OrderDateKey, 4) >= YEAR(GETDATE())-2
+	<span class="green-word">-- Ensures we always only bring two years of date from extraction.</span>
+ORDER BY OrderDateKey ASC</code>
+											</pre>
+											<hr>
+											<p style="font-size: 24px; text-align: left; font-weight: bold;">Data Model (Power BI)</p>
+											<p style="text-align: left">Below is a screenshot of the data model after cleansed and prepared tables were read into Power BI.</p>
+											<p style="text-align: left">This data model also shows how FACT_Budget has been connected to FACT_InternetSales and other necessary DIM tables.</p>
+											<a href="#" class="image main"><img src="images/pic102HD.png" alt="" /></a>
+											<hr>
+											<p style="font-size: 24px; text-align: left; font-weight: bold;">Visualization in Power BI</p>
+											<p style="text-align: left">The finished sales management dashboard with one page with works as a dashboard and overview, with two other page focused on combining tables for necessary details and visualizations to show sales over time, per customer and per products.</p>
+											<!--p style="text-align: left; font-weight: bold;">Click the picture to open the dashboard and try it out!</p-->
+											<a href="#" class="image main"><img src="images/pic103hd.jpg" alt="" /></a>
+											<p style="font-size: 24px; text-align: left; font-weight: bold;">Conclusion</p>
+											<p>I have demonstrated my proficiency in SQL, data cleaning, and visualization using Power BI through the previous cases.<br \> 
+												Moving forward, I am eager to showcase my expertise in Python modeling and regression analysis. <br \> 
+												<br \> 
+											</p>
+											<a href="generic.html" class="button">View Python Case 2&3</a>
+											
+
+										</div>
+								</header>
+							</article>
+						<!-- SQL CODE -->
+
+
+						<!-- Posts -->
+							<section class="posts">
+								<article>
+									<header>
+										<span class="date"></span>
+										<h2><a href="#">Data Exploration<br />
+										In SQL</a></h2>
+									</header>
+									<a href="#" class="image fit"><img src="images/pic202hd.png" alt="" /></a>
+									<p>I am well-versed in SQL for data exploration, which enables me to thoroughly analyze and interpret data, discover patterns and insights, and provide actionable solutions to business questions.										</p>
+									<ul class="actions special">
+										<li><a href="https://github.com/WangTheAnalyst/PortfolioProject" class="button">View Project</a></li>
+									</ul>
+								</article>
+								<article>
+									<header>
+										<span class="date"> </span>
+										<h2><a href="#">Tableau Project<br />
+										Visualizations</a></h2>
+									</header>
+									<a href="#" class="image fit"><img src="images/pic03hd.png" alt="" /></a>
+									<p>I have extensive experience in creating interactive Tableau visualizations and dashboards that enable data-driven decision-making and help achieve business objectives.</p>
+									<ul class="actions special">
+										<li><a href="elements.html" class="button">View Project</a></li>
+									</ul>
+								</article>
+								<article>
+									<header>
+										<span class="date"> </span>
+										<h2><a href="#">Data Science<br />
+										Regression Analysis</a></h2>
+									</header>
+									<a href="#" class="image fit"><img src="images/pic04hd.png" alt="" /></a>
+									<p>
+											Proficient in utilizing
+											<span style="color:green; font-weight:bold;">Python</span> for
+											<span style="color:green; font-weight:bold;">statistical analysis</span>
+											and <span style="color:green; font-weight:bold;">machine learning modeling</span>,
+											adept at using <span style="background-color:lightgray;">plot.show()</span> for exploratory
+											data analysis (EDA), and skilled
+											in applying models such as <span style="background-color:lightgray;">Decision Tree</span>
+											and <span style="background-color:lightgray;">Logistic Regression</span> for
+											predictive analysis.
+										  </p>
+									<ul class="actions special">
+										<li><a href="generic.html" class="button">View Project</a></li>
+									</ul>
+								</article>
+								<article>
+									<header>
+										<span class="date"> </span>
+										<h2><a href="#">Business Analytics<br />
+										Specialization</a></h2>
+									</header>
+									<a href="#" class="image fit"><img src="images/pic05hd.png" alt="" /></a>
+									<p>“In the 21st Century, it’s not what you know that matters—it’s how you use what you know that will determine your success in business and in life.”</p>
+									<p style="text-align: right;">– Geoffrey Garrett, Former Dean of The Wharton School</p>
+									<!--ul class="actions special">
+										<li><a href="#" class="button">View Project</a></li>
+									</ul-->
+								</article>
+								<!--article>
+									<header>
+										<span class="date"> </span>
+										<h2><a href="#">Odio magna<br />
+										sed consectetur</a></h2>
+									</header>
+									<a href="#" class="image fit"><img src="images/pic06.jpg" alt="" /></a>
+									<p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis magna etiam.</p>
+									<ul class="actions special">
+										<li><a href="#" class="button">View Project</a></li>
+									</ul>
+								</article>
+								<article>
+									<header>
+										<span class="date"> </span>
+										<h2><a href="#">Augue lorem<br />
+										primis vestibulum</a></h2>
+									</header>
+									<a href="#" class="image fit"><img src="images/pic07.jpg" alt="" /></a>
+									<p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis magna etiam.</p>
+									<ul class="actions special">
+										<li><a href="#" class="button">View Project</a></li>
+									</ul>
+								</article-->
+							</section>
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<!--section>
+							<form method="post" action="#">
+								<div class="fields">
+									<div class="field">
+										<label for="name">Name</label>
+										<input type="text" name="name" id="name" />
+									</div>
+									<div class="field">
+										<label for="email">Email</label>
+										<input type="text" name="email" id="email" />
+									</div>
+									<div class="field">
+										<label for="message">Message</label>
+										<textarea name="message" id="message" rows="3"></textarea>
+									</div>
+								</div>
+								<ul class="actions">
+									<li><input type="submit" value="Send Message" /></li>
+								</ul>
+							</form>
+						</section-->
+						<section class="split contact">
+							<!--section class="alt">
+								<h3>Address</h3>
+								<p>Shanghai, China</p>
+							</section>
+							<section>
+								<h3>Phone</h3>
+								<p>+86-166 2128 0729<br \> 011-86-166 2128 0729</p>
+							</section-->
+							<section>
+								<h3>Email</h3>
+								<p><a href="#">WangTheAnalyst@gmail.com</a></p>
+							</section>
+							<section>
+								<h3>Social</h3>
+								<ul class="icons alt">
+									<!--li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li-->
+									<!--li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li-->
+									<li><a href="#" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
+									<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</section>
+						</section>
+					</footer>
+
+				<!-- Copyright -->
+					<div id="copyright">
+						<ul><li>&copy; Tom Wang</li><li> <a href="#">Back To Top</a></li></ul>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

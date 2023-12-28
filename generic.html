@@ -1,0 +1,543 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Analyst Portfolio by Tom Wang</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo">Tom Wang</a>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul class="links">
+							<li><a href="index.html">Case 1: SQL and Power BI</a></li>
+							<li class="active"><a href="generic.html">Case 2&3: Python</a></li>
+							<li><a href="elements.html">Case 4: Tablueau</a></li>
+						</ul>
+						<ul class="icons">
+							<!--li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li-->
+							<!--li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li-->
+							<li><a href="#" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
+							<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<section class="post">
+								<header class="major">
+									<h1>Python Case 2&3 <br></h1>
+									<p>
+									Case 2 Target: to produce a range of graphs such as 1)catplots, 2)boxplots, 3)heatmaps.<br />
+									Case 3 Target: to construct a LogisticRegression Model by Scikit-Learn(Machine Learning). </p>
+								</header>
+										<h3>Workflow Process in Case 2: EDA_Case2_Boston_Airbnb</h3>
+											<ol>
+												<li>Basic Setting</li>
+												<li>Data Collecting</li>
+												<li>Data Cleaning</li>
+												<li>Exploratory Data Analysis(EDA)</li>
+												<li>Communication</li>
+											</ol>
+
+								<div class="image main"><img src="images/Case2view.png" alt="" /></div>
+									<header>
+										<h3>1. Basic Setting</h3>
+										<p>import libraries in Python</p>
+									</header>
+<!-- Preformatted Code -->
+<pre><code>import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+%matplotlib inline
+</code></pre>
+									<header>
+										<h3>2. Data Collecting</h3>
+										<p>Use read_csv() in pandas</p>
+									</header>
+<!-- Preformatted Code -->
+<pre><code>listing_path = '/kaggle/input/boston/listings.csv'
+listing_data = pd.read_csv(listing_path, usecols = ['property_type','room_type','accommodates','bedrooms','price'])
+listing_data.head()
+</code></pre>
+
+<table>
+  <tr>
+    <th></th>
+    <th>property_type</th>
+    <th>room_type</th>
+    <th>accommodates</th>
+    <th>bedrooms</th>
+    <th>price</th>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>House</td>
+    <td>Entire home/apt</td>
+    <td>4</td>
+    <td>2.0</td>
+    <td>$250.00</td>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>Apartment</td>
+    <td>Private room</td>
+    <td>2</td>
+    <td>1.0</td>
+    <td>$65.00</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>Apartment</td>
+    <td>Private room</td>
+    <td>2</td>
+    <td>1.0</td>
+    <td>$65.00</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>House</td>
+    <td>Private room</td>
+    <td>4</td>
+    <td>1.0</td>
+    <td>$75.00</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>House</td>
+    <td>Private room</td>
+    <td>2</td>
+    <td>1.0</td>
+    <td>$79.00</td>
+  </tr>
+</table>
+									<header>
+										<h3>3. Data Cleaning</h3>
+										<p>Use for-loop in pandas</p>
+									</header>
+<!-- Preformatted Code -->
+<pre><code># Step 1: Cleaning wrong format data
+price_data_list = listing_data['price'].tolist()
+
+# Cleaning the 'Price' from string to float
+price_list = [float(item.replace(',', '')[1:])for item in price_data_list]
+listing_data['price'] = price_list
+</code></pre>
+<pre><code># Step 2: Cleaning Empty Cells
+new_listing_data = listing_data.dropna()						
+</code></pre>
+									<header>
+										<h3>4. Exploratory Data Analysis(EDA)</h3>
+										<p>Use plot in matplotlib</p>
+									</header>
+<!-- Preformatted Code -->
+<pre><code>plt.figure(figsize = (12, 6))
+sns.boxplot(x = 'property_type', y = 'price', data = new_listing_data)
+xt = plt.xticks(rotation = 90)
+</code></pre>
+<div class="image main"><img src="images/Case2pic3.png" alt="" /></div>
+<pre><code># Step 3 of Cleaning: Delete the Outlier
+new_listing_data = new_listing_data[new_listing_data['price'] <= 500]
+sns.boxplot(y = 'property_type', x = 'price', data = new_listing_data);					
+</code></pre>
+<div class="image main"><img src="images/Case2pic4.png" alt="" /></div>
+<pre><code># Keep on exploring the data
+sns.catplot(x = 'accommodates',y = 'price',data = new_listing_data, color = 'b', \
+               estimator = np.median, size = 4.5, aspect = 1.35)
+xt = plt.xticks(rotation = 90)
+</code></pre>
+<div class="image main"><img src="images/Case2pic5.png" alt="" /></div>
+<pre><code>plt.figure(figsize = (10,10))
+sns.heatmap(new_listing_data.groupby(['property_type', 'bedrooms'])['price'].mean().unstack(), \
+            annot=True, fmt=".0f")
+</code></pre>
+<div class="image main"><img src="images/Case2pic6.png" alt="" /></div>
+<h3>5. Communication</h3>
+<p>In this case we produced a range of graphs such as 1)catplots, 2)boxplots, 3)heatmaps.<br \>
+And let's communicate with team members to have a mind-storm.</p>
+<header class="major">
+									<h1>Python Case 3</h1>
+									<p>Case 3 Target: to construct a LogisticRegression Model by Scikit-Learn(Machine Learning). </p>
+								</header>
+									
+											<h3>Workflow Process in Case 3: EDA_Case3_Financial_Fraud</h3>
+											<ol>
+												<li>Data Collecting, Data Cleaning</li>
+												<li>Exploratory Data Analysis(EDA)</li>
+												<li>Constructing LogisticRegression Models</li>
+												<li>Revaluation </li>
+												<li>Communication</li>
+											</ol>
+								<div class="image main"><img src="images/Case3pic.png" alt="" /></div>
+									<header>
+										<h3>0. Defination: Headers</h3>
+										<p></p>
+									</header>
+								<blockquote>First_Row: 1,PAYMENT,1060.31,C429214117,1089.0,28.69,M1591654462,0.0,0.0,0,0<br \>
+
+step - maps a unit of time in the real world. In this case 1 step is 1 hour of time. Total steps 744 (30 days simulation).<br \>
+
+type - CASH-IN, CASH-OUT, DEBIT, PAYMENT and TRANSFER.<br \>
+
+amount - amount of the transaction in local currency.<br \>
+
+nameOrig - customer who started the transaction<br \>
+
+oldbalanceOrg - initial balance before the transaction<br \>
+
+newbalanceOrig - new balance after the transaction.<br \>
+
+nameDest - customer who is the recipient of the transaction<br \>
+
+oldbalanceDest - initial balance recipient before the transaction. Note that there is not information for customers that start with M (Merchants).<br \>
+
+newbalanceDest - new balance recipient after the transaction. Note that there is not information for customers that start with M (Merchants).<br \>
+
+isFraud - This is the transactions made by the fraudulent agents inside the simulation. In this specific dataset the fraudulent behavior of the agents aims to profit by taking control or customers accounts and try to empty the funds by transferring to another account and then cashing out of the system.<br \>
+
+isFlaggedFraud - The business model aims to control massive transfers from one account to another and flags illegal attempts. An illegal attempt in this dataset is an attempt to transfer more than 200.000 in a single transaction.</blockquote>
+								<header>
+									<h3>1. Data Collecting, Data Cleaning</h3>
+									<p></p>
+
+<pre><code># Basic setting
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import seaborn as sos
+%matplotlib inline
+
+# Import the Mechina Learning Library 
+from sklearn import preprocessing
+</code></pre>
+<p>Setup Complete</p>
+<pre><code># Data Collecting
+csvfile_path = '/kaggle/input/paysim1/PS_20174392719_1491204439457_log.csv'
+raw_data = pd.read_csv(csvfile_path)
+</code></pre>
+
+
+								</header>
+<pre><code># Data Information
+print('Preview:')
+print(raw_data.head())
+print('Describe:')
+print(raw_data.describe())
+print('Basic Information:')
+print(raw_data.info())
+</code></pre>
+<pre><code>Preview:
+   step      type    amount     nameOrig  oldbalanceOrg  newbalanceOrig  \
+0     1   PAYMENT   9839.64  C1231006815       170136.0       160296.36   
+1     1   PAYMENT   1864.28  C1666544295        21249.0        19384.72   
+2     1  TRANSFER    181.00  C1305486145          181.0            0.00   
+3     1  CASH_OUT    181.00   C840083671          181.0            0.00   
+4     1   PAYMENT  11668.14  C2048537720        41554.0        29885.86   
+
+      nameDest  oldbalanceDest  newbalanceDest  isFraud  isFlaggedFraud  
+0  M1979787155             0.0             0.0        0               0  
+1  M2044282225             0.0             0.0        0               0  
+2   C553264065             0.0             0.0        1               0  
+3    C38997010         21182.0             0.0        1               0  
+4  M1230701703             0.0             0.0        0               0  
+Describe:
+               step        amount  oldbalanceOrg  newbalanceOrig  \
+count  6.362620e+06  6.362620e+06   6.362620e+06    6.362620e+06   
+mean   2.433972e+02  1.798619e+05   8.338831e+05    8.551137e+05   
+std    1.423320e+02  6.038582e+05   2.888243e+06    2.924049e+06   
+min    1.000000e+00  0.000000e+00   0.000000e+00    0.000000e+00   
+25%    1.560000e+02  1.338957e+04   0.000000e+00    0.000000e+00   
+50%    2.390000e+02  7.487194e+04   1.420800e+04    0.000000e+00   
+75%    3.350000e+02  2.087215e+05   1.073152e+05    1.442584e+05   
+max    7.430000e+02  9.244552e+07   5.958504e+07    4.958504e+07   
+
+       oldbalanceDest  newbalanceDest       isFraud  isFlaggedFraud  
+count    6.362620e+06    6.362620e+06  6.362620e+06    6.362620e+06  
+mean     1.100702e+06    1.224996e+06  1.290820e-03    2.514687e-06  
+std      3.399180e+06    3.674129e+06  3.590480e-02    1.585775e-03  
+min      0.000000e+00    0.000000e+00  0.000000e+00    0.000000e+00  
+25%      0.000000e+00    0.000000e+00  0.000000e+00    0.000000e+00  
+50%      1.327057e+05    2.146614e+05  0.000000e+00    0.000000e+00  
+75%      9.430367e+05    1.111909e+06  0.000000e+00    0.000000e+00  
+max      3.560159e+08    3.561793e+08  1.000000e+00    1.000000e+00  
+Basic Information:
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 6362620 entries, 0 to 6362619
+Data columns (total 11 columns):
+ #   Column          Dtype  
+---  ------          -----  
+ 0   step            int64  
+ 1   type            object 
+ 2   amount          float64
+ 3   nameOrig        object 
+ 4   oldbalanceOrg   float64
+ 5   newbalanceOrig  float64
+ 6   nameDest        object 
+ 7   oldbalanceDest  float64
+ 8   newbalanceDest  float64
+ 9   isFraud         int64  
+ 10  isFlaggedFraud  int64  
+dtypes: float64(5), int64(3), object(3)
+memory usage: 534.0+ MB
+None</code></pre>
+										<h3>2. Exploratory Data Analysis(EDA)</h3>
+<p>2.1 Data Cleaning</p>
+<pre><code># Step 1: Overview Transaction Type
+print('Transaction Type')
+print(raw_data['type'].value_counts())
+
+fig, ax = plt.subplots(1, 1, figsize = (8, 4))
+raw_data['type'].value_counts().plot(kind='bar', title = 'Transaction Type', \
+                                     ax = ax, figsize = (8, 4))
+ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, \
+                                               loc: "{:,}".format(int(x))))
+plt.show()</code></pre>
+<pre><code>Transaction Type
+type
+CASH_OUT    2237500
+PAYMENT     2151495
+CASH_IN     1399284
+TRANSFER     532909
+DEBIT         41432
+Name: count, dtype: int64</code></pre>
+								<div class="image main"><img src="images/Case3pic2.png" alt="" /></div>
+<pre><code># STEP 2: Select **type** and **isFraud** records
+ax = raw_data.groupby(['type', 'isFraud']).size().plot(kind='bar')
+ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, \
+                                               loc: "{:,}".format(int(x))))
+ax.set_title('# of transactions vs (type + isFraud)')
+ax.set_xlabel('(type, isFraud)')
+ax.set_ylabel('# of transaction')
+
+# Add Tags
+for p in ax.patches:
+    ax.annotate(str(format(int(p.get_height()), \
+                           ',d')),(p.get_x(),p.get_height()*1.01))</code></pre>
+								<div class="image main"><img src="images/Case3pic3.png" alt="" /></div>
+<p>Key Learn<br \>
+With the target of detecting financial fraud, we discovered that fraud is concentrated in CASH_OUT(4116) and TRANSFER(4097).</p>
+<pre><code>fig, axs = plt.subplots(2,2,figsize=(10,10))
+transfer_data = raw_data[raw_data['type'] == 'TRANSFER']
+a = sns.boxplot(x = 'isFlaggedFraud', y = 'amount', data = transfer_data, ax = axs[0][0])
+axs[0][0].set_yscale('log')
+b = sns.boxplot(x = 'isFlaggedFraud', y = 'oldbalanceDest', data = transfer_data, ax = axs[0][1])
+axs[0][1].set(ylim = (0, 0.5e8))
+c = sns.boxplot(x = 'isFlaggedFraud', y = 'oldbalanceOrg', data = transfer_data, ax = axs[1][0])
+axs[1][0].set(ylim = (0, 0.3e7))
+d = sns.regplot(x = 'oldbalanceOrg', y = 'amount', data = transfer_data[transfer_data['isFlaggedFraud'] == 1], ax = axs[1][1])
+plt.show()</code></pre>
+								<div class="image main"><img src="images/Case3pic4.png" alt="" /></div>
+<p>It can be seen that there are some statistical characteristics of financial fraud:<br \>
+1. The amount of a single fraud transaction is greater than the average value.<br \>
+2. The oldbalanceDest associated with financial fraud tends to zero, which is significantly different from ordinary transactions.<br \>
+3. The oldbalanceOrg associated with financial fraud is higher than the mean of ordinary transactions.<br \>
+4. There is a relevant relationship between oldbalanceOrg and amount, which can be further explored by constructing models.<br \>
+That's beautiful.</p>
+<pre><code># SELECT CASH_OUT and TRANSFER
+used_data = raw_data[(raw_data['type'] == 'TRANSFER') | (raw_data['type'] == 'CASH_OUT')]
+used_data.drop(['step', 'nameOrig', 'nameDest', 'isFlaggedFraud'], axis = 1, inplace = True)
+used_data = used_data.reset_index(drop = True)
+
+# Change type into 0\1 named 'typeCategory'
+type_label_encoder = preprocessing.LabelEncoder()
+type_category = type_label_encoder.fit_transform(used_data['type'].values)
+used_data['typeCategory'] = type_category
+
+print(used_data.head())</code></pre>
+<pre><code>       type     amount  oldbalanceOrg  newbalanceOrig  oldbalanceDest  \
+0  TRANSFER     181.00          181.0             0.0             0.0   
+1  CASH_OUT     181.00          181.0             0.0         21182.0   
+2  CASH_OUT  229133.94        15325.0             0.0          5083.0   
+3  TRANSFER  215310.30          705.0             0.0         22425.0   
+4  TRANSFER  311685.89        10835.0             0.0          6267.0   
+
+   newbalanceDest  isFraud  typeCategory  
+0            0.00        1             1  
+1            0.00        1             0  
+2        51513.44        0             0  
+3            0.00        0             1  
+4      2719172.89        0             1  </code></pre>
+<pre><code># Cleaning: Drop 'type<string>' column
+used2_data = used_data.drop('type', axis=1)
+# Exploring the relevant relationship
+sns.heatmap(used2_data.corr());</code></pre>
+								<div class="image main"><img src="images/Case3pic5.png" alt="" /></div>
+<pre><code># Check Transaction Type counts
+ax = used_data['type'].value_counts().plot(kind = "bar", title = 'Transaction Type', figsize = (6, 6))
+for p in ax.patches:
+	ax.annotate(str(format(int(p.get_height()),'d')),(p.get_x(), p.get_height() * 1.01))
+plt.show()
+
+# Check 'isFraud' counts in Transaction Type
+ax =  pd.value_counts(used_data['isFraud'], sort = True).sort_index().plot(kind = 'bar', title = 'Fraud Transaction Count')
+for p in ax.patches:
+	ax.annotate(str(format(int(p.get_height()),'d')),(p.get_x(), p.get_height()))
+plt.show()</code></pre>
+								<div class="image main"><img src="images/Case3pic7.png" alt="" /></div>
+										<h3>3. Constructing LogisticRegression Models</h3>
+<p>3.1 Preparation for Constructing Models</p>
+<pre><code># Preparing
+feature_names = ['amount', 'oldbalanceOrg', 'newbalanceOrig', 'oldbalanceDest', 'newbalanceDest', 'typeCategory']
+X = used_data[feature_names]
+y = used_data['isFraud']
+print(X.head())
+print(y.head())</code></pre>
+<pre><code>      amount  oldbalanceOrg  newbalanceOrig  oldbalanceDest  newbalanceDest  \
+0     181.00          181.0             0.0             0.0            0.00   
+1     181.00          181.0             0.0         21182.0            0.00   
+2  229133.94        15325.0             0.0          5083.0        51513.44   
+3  215310.30          705.0             0.0         22425.0            0.00   
+4  311685.89        10835.0             0.0          6267.0      2719172.89   
+
+   typeCategory  
+0             1  
+1             0  
+2             0  
+3             1  
+4             1  
+0    1
+1    1
+2    0
+3    0
+4    0
+Name: isFraud, dtype: int64</code></pre>
+<pre><code># Cleaning: unbalance data
+number_records_fraud = len(used_data[used_data['isFraud'] == 1])
+fraud_indices = used_data[used_data['isFraud'] == 1].index.values
+
+nonfraud_indices = used_data[used_data['isFraud'] == 0].index
+
+random_nonfraud_indices = np.random.choice(nonfraud_indices, number_records_fraud, replace = False)
+random_nonfraud_indices = np.array(random_nonfraud_indices)
+
+# Joining indices
+under_sample_indices = np.concatenate([fraud_indices, random_nonfraud_indices])
+under_sample_data = used_data.iloc[under_sample_indices, :]
+
+X_undersample = under_sample_data[feature_names].values
+y_undersample = under_sample_data['isFraud'].values
+
+# Show the proportion of Samples
+print('nonfraud proportion:', len(under_sample_data[under_sample_data['isFraud'] == 0]) / len(under_sample_data))
+print('fraud proportion:', len(under_sample_data[under_sample_data['isFraud'] == 1]) / len(under_sample_data))
+print('nonfraud proportion:', len(under_sample_data))</code></pre>
+<blockquote>nonfraud proportion: 0.5<br \>
+fraud proportion: 0.5<br \>
+nonfraud proportion: 16426</blockquote>
+<p>3.2 Constructing Models</p>
+<pre><code>from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import roc_curve, auc
+
+# Split into training and validating data
+X_train, X_test, y_train, y_test = train_test_split(X_undersample, y_undersample, test_size = 0.3, random_state = 0)
+
+lr_model = LogisticRegression()
+lr_model.fit(X_train, y_train)
+
+y_pred_score = lr_model.predict_proba(X_test)
+
+fpr, tpr, thresholds = roc_curve(y_test, y_pred_score[:, 1])
+roc_auc = auc(fpr,tpr)
+
+# Draw ROC curve
+plt.title('Receive Operating Characteristic')
+plt.plot(fpr, tpr, 'b', label = 'AUC = %0.2f'% roc_auc)
+plt.legend(loc = 'lower right')
+plt.plot([0,1],[0,1],'r--')
+plt.xlim([-0.1, 1.0])
+plt.ylim([-0.1,1.01])
+plt.ylabel('True Positive Rate')
+plt.xlabel('False Positive Rate')
+plt.show()</code></pre>
+								<div class="image main"><img src="images/Case3pic8.png" alt="" /></div>
+<p>AUC=0.97 means LogisticRegression Model has high predictive value.<br \>
+AUC is between 0 and 1.The random conjecture is 0.5. If AUC is equal to 0.5, there is no predictive value.<br \>
+That's extraordinary story. And it can continue to evolve through RandomForestRegressor and DecisionTreeRegressor.</p>
+										<h3>4. Revaluation</h3>
+										<h3>5. Communication</h3>
+
+							</section>
+
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<!--section>
+							<form method="post" action="#">
+								<div class="fields">
+									<div class="field">
+										<label for="name">Name</label>
+										<input type="text" name="name" id="name" />
+									</div>
+									<div class="field">
+										<label for="email">Email</label>
+										<input type="text" name="email" id="email" />
+									</div>
+									<div class="field">
+										<label for="message">Message</label>
+										<textarea name="message" id="message" rows="3"></textarea>
+									</div>
+								</div>
+								<ul class="actions">
+									<li><input type="submit" value="Send Message" /></li>
+								</ul>
+							</form>
+						</section-->
+						<section class="split contact">
+							<!--section class="alt">
+								<h3>Address</h3>
+								<p>Shanghai, China</p>
+							</section>
+							<section>
+								<h3>Phone</h3>
+								<p>+86-166 2128 0729<br \> 011-86-166 2128 0729</p>
+							</section-->
+							<section>
+								<h3>Email</h3>
+								<p><a href="#">WangTheAnalyst@gmail.com</a></p>
+							</section>
+							<section>
+								<h3>Social</h3>
+								<ul class="icons alt">
+									<!--li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li-->
+									<!--li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li-->
+									<li><a href="#" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
+									<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</section>
+						</section>
+					</footer>
+
+				<!-- Copyright -->
+				<div id="copyright">
+					<ul><li>&copy; Tom Wang</li><li> <a href="#">Back To Top</a></li></ul>
+				</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
